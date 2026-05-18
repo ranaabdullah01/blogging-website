@@ -1,0 +1,7 @@
+{
+  "siteTitle": "Static CMS Blog",
+  "siteDescription": "A modern, secure static site CMS",
+  "postsPerPage": 10,
+  "dateFormat": "MMMM DD, YYYY",
+  "timezone": "UTC"
+}
