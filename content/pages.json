@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1",
+    "title": "About",
+    "slug": "about",
+    "content": "# About This Site\n\nThis website is powered by Static CMS, a secure, serverless content management system.\n\n## Technology Stack\n\n- **Frontend**: GitHub Pages for static hosting\n- **API Gateway**: Cloudflare Workers for security\n- **Storage**: Backblaze B2 for media files\n- **Content**: JSON files in GitHub repository\n\nBuilt with modern Jamstack principles for optimal performance and security.",
+    "order": 1,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "title": "Contact",
+    "slug": "contact",
+    "content": "# Contact Us\n\nHave questions or feedback? We'd love to hear from you!\n\n## Get in Touch\n\n- **Email**: hello@example.com\n- **Twitter**: @example\n- **GitHub**: github.com/example\n\nWe'll get back to you as soon as possible.",
+    "order": 2,
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  }
+]
