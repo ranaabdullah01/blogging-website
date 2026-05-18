@@ -1,0 +1,11 @@
+{
+  "name": "Classic",
+  "version": "1.0.0",
+  "author": "Static CMS",
+  "description": "A clean, classic blog theme",
+  "features": {
+    "responsive": true,
+    "darkMode": false,
+    "comments": false
+  }
+}
