@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static CMS - Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+            margin-bottom: -2px;
+        }
+
+        /* Forms */
+        .form-card {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        button.danger {
+            background: #e74c3c;
+        }
+
+        button.danger:hover {
+            background: #c0392b;
+        }
+
+        /* Lists */
+        .items-list {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .list-item {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info h3 {
+            margin-bottom: 0.25rem;
+        }
+
+        .item-info p {
+            color: #666;
+            font-size: 0.875rem;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Media Grid */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .media-item {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .media-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .media-info {
+            padding: 0.75rem;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .list-item {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .item-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">Static CMS</div>
+            <div id="status"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('posts')">Posts</button>
+            <button class="tab" onclick="switchTab('pages')">Pages</button>
+            <button class="tab" onclick="switchTab('media')">Media</button>
+            <button class="tab" onclick="switchTab('settings')">Settings</button>
+        </div>
+
+        <!-- Posts Tab -->
+        <div id="postsTab" class="tab-content">
+            <div class="form-card">
+                <h2>Create New Post</h2>
+                <form id="postForm">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="postTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Slug (URL path)</label>
+                        <input type="text" id="postSlug" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Excerpt</label>
+                        <textarea id="postExcerpt" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Content (Markdown)</label>
+                        <textarea id="postContent" rows="10" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Featured Image URL</label>
+                        <input type="text" id="postImage">
+                    </div>
+                    <div class="form-group">
+                        <label>Tags (comma-separated)</label>
+                        <input type="text" id="postTags">
+                    </div>
+                    <button type="submit">Create Post</button>
+                </form>
+            </div>
+
+            <div id="postsList" class="items-list">
+                <div class="loading">Loading posts...</div>
+            </div>
+        </div>
+
+        <!-- Pages Tab -->
+        <div id="pagesTab" class="tab-content" style="display:none;">
+            <div class="form-card">
+                <h2>Create New Page</h2>
+                <form id="pageForm">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="pageTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Slug (URL path)</label>
+                        <input type="text" id="pageSlug" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Content (Markdown)</label>
+                        <textarea id="pageContent" rows="10" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Order</label>
+                        <input type="number" id="pageOrder" value="0">
+                    </div>
+                    <button type="submit">Create Page</button>
+                </form>
+            </div>
+
+            <div id="pagesList" class="items-list">
+                <div class="loading">Loading pages...</div>
+            </div>
+        </div>
+
+        <!-- Media Tab -->
+        <div id="mediaTab" class="tab-content" style="display:none;">
+            <div class="form-card">
+                <h2>Upload Media</h2>
+                <form id="mediaForm">
+                    <div class="form-group">
+                        <label>Select File</label>
+                        <input type="file" id="mediaFile" accept="image/*,video/*,application/pdf" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Alternative Text</label>
+                        <input type="text" id="mediaAlt">
+                    </div>
+                    <button type="submit">Upload</button>
+                </form>
+            </div>
+
+            <div id="mediaGrid" class="media-grid">
+                <div class="loading">Loading media...</div>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settingsTab" class="tab-content" style="display:none;">
+            <div class="form-card">
+                <h2>Site Settings</h2>
+                <form id="settingsForm">
+                    <div class="form-group">
+                        <label>Site Title</label>
+                        <input type="text" id="siteTitle">
+                    </div>
+                    <div class="form-group">
+                        <label>Site Description</label>
+                        <textarea id="siteDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Posts Per Page</label>
+                        <input type="number" id="postsPerPage">
+                    </div>
+                    <button type="submit">Save Settings</button>
+                </form>
+            </div>
+
+            <div class="form-card">
+                <h2>Theme Settings</h2>
+                <form id="themeForm">
+                    <div class="form-group">
+                        <label>Active Theme</label>
+                        <select id="activeTheme">
+                            <option value="classic">Classic</option>
+                        </select>
+                    </div>
+                    <button type="submit">Activate Theme</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Edit Item</h2>
+            <form id="editForm">
+                <div id="editFormFields"></div>
+                <div style="display: flex; gap: 10px; margin-top: 1rem;">
+                    <button type="submit">Save Changes</button>
+                    <button type="button" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:8787'  // Local Cloudflare Worker
+            : 'https://your-worker.your-subdomain.workers.dev'; // Production Worker URL
+        
+        let currentEditId = null;
+        let currentEditType = null;
+
+        // Helper function for API calls
+        async function apiCall(endpoint, method = 'GET', data = null) {
+            const options = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+            
+            if (data) {
+                options.body = JSON.stringify(data);
+            }
+            
+            const response = await fetch(`${API_URL}${endpoint}`, options);
+            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || 'API call failed');
+            }
+            
+            return response.json();
+        }
+
+        // Show alert message
+        function showAlert(message, type = 'success') {
+            const alert = document.createElement('div');
+            alert.className = `alert ${type}`;
+            alert.textContent = message;
+            document.querySelector('.container').insertBefore(alert, document.querySelector('.container').firstChild);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        }
+
+        // Switch tabs
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            document.getElementById(`${tab}Tab`).style.display = 'block';
+            
+            document.querySelectorAll('.tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            // Load data for the selected tab
+            if (tab === 'posts') loadPosts();
+            else if (tab === 'pages') loadPages();
+            else if (tab === 'media') loadMedia();
+            else if (tab === 'settings') loadSettings();
+        }
+
+        // Posts functions
+        async function loadPosts() {
+            try {
+                const posts = await apiCall('/api/posts');
+                const postsList = document.getElementById('postsList');
+                
+                if (posts.length === 0) {
+                    postsList.innerHTML = '<div class="loading">No posts found. Create your first post!</div>';
+                    return;
+                }
+                
+                postsList.innerHTML = posts.map(post => `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <h3>${escapeHtml(post.title)}</h3>
+                            <p>Slug: ${post.slug} | Created: ${new Date(post.createdAt).toLocaleDateString()}</p>
+                        </div>
+                        <div class="item-actions">
+                            <button onclick="editPost('${post.id}')">Edit</button>
+                            <button class="danger" onclick="deletePost('${post.id}')">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                showAlert('Failed to load posts: ' + error.message, 'error');
+            }
+        }
+
+        document.getElementById('postForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const post = {
+                title: document.getElementById('postTitle').value,
+                slug: document.getElementById('postSlug').value,
+                excerpt: document.getElementById('postExcerpt').value,
+                content: document.getElementById('postContent').value,
+                featuredImage: document.getElementById('postImage').value,
+                tags: document.getElementById('postTags').value.split(',').map(t => t.trim()),
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            
+            try {
+                await apiCall('/api/posts', 'POST', post);
+                showAlert('Post created successfully!');
+                e.target.reset();
+                loadPosts();
+            } catch (error) {
+                showAlert('Failed to create post: ' + error.message, 'error');
+            }
+        });
+        
+        async function editPost(id) {
+            try {
+                const posts = await apiCall('/api/posts');
+                const post = posts.find(p => p.id === id);
+                if (!post) throw new Error('Post not found');
+                
+                currentEditId = id;
+                currentEditType = 'post';
+                
+                document.getElementById('modalTitle').textContent = 'Edit Post';
+                document.getElementById('editFormFields').innerHTML = `
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="editTitle" value="${escapeHtml(post.title)}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Slug</label>
+                        <input type="text" id="editSlug" value="${escapeHtml(post.slug)}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Excerpt</label>
+                        <textarea id="editExcerpt" rows="3">${escapeHtml(post.excerpt || '')}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Content</label>
+                        <textarea id="editContent" rows="10" required>${escapeHtml(post.content)}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Featured Image URL</label>
+                        <input type="text" id="editImage" value="${escapeHtml(post.featuredImage || '')}">
+                    </div>
+                    <div class="form-group">
+                        <label>Tags</label>
+                        <input type="text" id="editTags" value="${escapeHtml((post.tags || []).join(', '))}">
+                    </div>
+                `;
+                
+                document.getElementById('editModal').style.display = 'block';
+            } catch (error) {
+                showAlert('Failed to load post: ' + error.message, 'error');
+            }
+        }
+        
+        async function deletePost(id) {
+            if (!confirm('Are you sure you want to delete this post?')) return;
+            
+            try {
+                await apiCall(`/api/posts/${id}`, 'DELETE');
+                showAlert('Post deleted successfully!');
+                loadPosts();
+            } catch (error) {
+                showAlert('Failed to delete post: ' + error.message, 'error');
+            }
+        }
+
+        // Pages functions
+        async function loadPages() {
+            try {
+                const pages = await apiCall('/api/pages');
+                const pagesList = document.getElementById('pagesList');
+                
+                if (pages.length === 0) {
+                    pagesList.innerHTML = '<div class="loading">No pages found. Create your first page!</div>';
+                    return;
+                }
+                
+                pagesList.innerHTML = pages.map(page => `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <h3>${escapeHtml(page.title)}</h3>
+                            <p>Slug: ${page.slug} | Order: ${page.order || 0}</p>
+                        </div>
+                        <div class="item-actions">
+                            <button onclick="editPage('${page.id}')">Edit</button>
+                            <button class="danger" onclick="deletePage('${page.id}')">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                showAlert('Failed to load pages: ' + error.message, 'error');
+            }
+        }
+
+        document.getElementById('pageForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const page = {
+                title: document.getElementById('pageTitle').value,
+                slug: document.getElementById('pageSlug').value,
+                content: document.getElementById('pageContent').value,
+                order: parseInt(document.getElementById('pageOrder').value),
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            
+            try {
+                await apiCall('/api/pages', 'POST', page);
+                showAlert('Page created successfully!');
+                e.target.reset();
+                loadPages();
+            } catch (error) {
+                showAlert('Failed to create page: ' + error.message, 'error');
+            }
+        });
+        
+        async function editPage(id) {
+            try {
+                const pages = await apiCall('/api/pages');
+                const page = pages.find(p => p.id === id);
+                if (!page) throw new Error('Page not found');
+                
+                currentEditId = id;
+                currentEditType = 'page';
+                
+                document.getElementById('modalTitle').textContent = 'Edit Page';
+                document.getElementById('editFormFields').innerHTML = `
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="editTitle" value="${escapeHtml(page.title)}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Slug</label>
+                        <input type="text" id="editSlug" value="${escapeHtml(page.slug)}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Content</label>
+                        <textarea id="editContent" rows="10" required>${escapeHtml(page.content)}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Order</label>
+                        <input type="number" id="editOrder" value="${page.order || 0}">
+                    </div>
+                `;
+                
+                document.getElementById('editModal').style.display = 'block';
+            } catch (error) {
+                showAlert('Failed to load page: ' + error.message, 'error');
+            }
+        }
+        
+        async function deletePage(id) {
+            if (!confirm('Are you sure you want to delete this page?')) return;
+            
+            try {
+                await apiCall(`/api/pages/${id}`, 'DELETE');
+                showAlert('Page deleted successfully!');
+                loadPages();
+            } catch (error) {
+                showAlert('Failed to delete page: ' + error.message, 'error');
+            }
+        }
+
+        // Media functions
+        async function loadMedia() {
+            try {
+                const media = await apiCall('/api/media');
+                const mediaGrid = document.getElementById('mediaGrid');
+                
+                if (media.length === 0) {
+                    mediaGrid.innerHTML = '<div class="loading">No media files found. Upload your first file!</div>';
+                    return;
+                }
+                
+                mediaGrid.innerHTML = media.map(item => `
+                    <div class="media-item">
+                        ${item.type === 'image' ? `<img src="${item.url}" alt="${escapeHtml(item.alt)}">` : `<div style="height:150px; background:#f0f0f0; display:flex; align-items:center; justify-content:center;">${item.type}</div>`}
+                        <div class="media-info">
+                            <p><strong>${escapeHtml(item.filename)}</strong></p>
+                            <p style="font-size:12px;">${(item.size / 1024).toFixed(2)} KB</p>
+                            <button onclick="copyToClipboard('${item.url}')">Copy URL</button>
+                            <button class="danger" onclick="deleteMedia('${item.id}')">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                showAlert('Failed to load media: ' + error.message, 'error');
+            }
+        }
+
+        document.getElementById('mediaForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const file = document.getElementById('mediaFile').files[0];
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('alt', document.getElementById('mediaAlt').value);
+            
+            try {
+                const response = await fetch(`${API_URL}/api/media/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) throw new Error('Upload failed');
+                
+                showAlert('File uploaded successfully!');
+                e.target.reset();
+                loadMedia();
+            } catch (error) {
+                showAlert('Failed to upload file: ' + error.message, 'error');
+            }
+        });
+        
+        async function deleteMedia(id) {
+            if (!confirm('Are you sure you want to delete this file?')) return;
+            
+            try {
+                await apiCall(`/api/media/${id}`, 'DELETE');
+                showAlert('File deleted successfully!');
+                loadMedia();
+            } catch (error) {
+                showAlert('Failed to delete file: ' + error.message, 'error');
+            }
+        }
+
+        // Settings functions
+        async function loadSettings() {
+            try {
+                const settings = await apiCall('/api/settings');
+                document.getElementById('siteTitle').value = settings.siteTitle || '';
+                document.getElementById('siteDescription').value = settings.siteDescription || '';
+                document.getElementById('postsPerPage').value = settings.postsPerPage || 10;
+                
+                const theme = await apiCall('/api/theme');
+                document.getElementById('activeTheme').value = theme.active || 'classic';
+            } catch (error) {
+                showAlert('Failed to load settings: ' + error.message, 'error');
+            }
+        }
+
+        document.getElementById('settingsForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const settings = {
+                siteTitle: document.getElementById('siteTitle').value,
+                siteDescription: document.getElementById('siteDescription').value,
+                postsPerPage: parseInt(document.getElementById('postsPerPage').value)
+            };
+            
+            try {
+                await apiCall('/api/settings', 'PUT', settings);
+                showAlert('Settings saved successfully!');
+            } catch (error) {
+                showAlert('Failed to save settings: ' + error.message, 'error');
+            }
+        });
+        
+        document.getElementById('themeForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const theme = {
+                active: document.getElementById('activeTheme').value
+            };
+            
+            try {
+                await apiCall('/api/theme', 'PUT', theme);
+                showAlert('Theme activated successfully!');
+            } catch (error) {
+                showAlert('Failed to activate theme: ' + error.message, 'error');
+            }
+        });
+
+        // Edit modal handlers
+        document.getElementById('editForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const updatedData = {};
+            
+            if (currentEditType === 'post') {
+                updatedData.title = document.getElementById('editTitle').value;
+                updatedData.slug = document.getElementById('editSlug').value;
+                updatedData.excerpt = document.getElementById('editExcerpt').value;
+                updatedData.content = document.getElementById('editContent').value;
+                updatedData.featuredImage = document.getElementById('editImage').value;
+                updatedData.tags = document.getElementById('editTags').value.split(',').map(t => t.trim());
+                updatedData.updatedAt = new Date().toISOString();
+                
+                try {
+                    await apiCall(`/api/posts/${currentEditId}`, 'PUT', updatedData);
+                    showAlert('Post updated successfully!');
+                    closeModal();
+                    loadPosts();
+                } catch (error) {
+                    showAlert('Failed to update post: ' + error.message, 'error');
+                }
+            } else if (currentEditType === 'page') {
+                updatedData.title = document.getElementById('editTitle').value;
+                updatedData.slug = document.getElementById('editSlug').value;
+                updatedData.content = document.getElementById('editContent').value;
+                updatedData.order = parseInt(document.getElementById('editOrder').value);
+                updatedData.updatedAt = new Date().toISOString();
+                
+                try {
+                    await apiCall(`/api/pages/${currentEditId}`, 'PUT', updatedData);
+                    showAlert('Page updated successfully!');
+                    closeModal();
+                    loadPages();
+                } catch (error) {
+                    showAlert('Failed to update page: ' + error.message, 'error');
+                }
+            }
+        });
+
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+            currentEditId = null;
+            currentEditType = null;
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text);
+            showAlert('URL copied to clipboard!');
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Initialize
+        loadPosts();
+    </script>
+</body>
+</html>
