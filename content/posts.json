@@ -1,0 +1,13 @@
+[
+  {
+    "id": "1",
+    "title": "Welcome to Static CMS",
+    "slug": "welcome-to-static-cms",
+    "excerpt": "A powerful, secure, and modern static site CMS",
+    "content": "# Welcome to Static CMS\n\nThis is your first post. Edit or delete it, then start writing!\n\n## Features\n\n- **Secure**: All API keys stored securely in Cloudflare Workers\n- **Fast**: Static site generation with GitHub Pages\n- **Flexible**: Markdown support and custom themes\n- **Media Management**: Backblaze B2 for file storage\n\nGet started by creating your first post from the admin panel.",
+    "featuredImage": "",
+    "tags": ["getting-started", "cms"],
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  }
+]
