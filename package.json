@@ -1,0 +1,17 @@
+{
+  "name": "static-cms",
+  "version": "1.0.0",
+  "description": "Static CMS Platform",
+  "main": "scripts/build.js",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "dev": "node scripts/build.js --watch"
+  },
+  "dependencies": {
+    "marked": "^11.1.0"
+  },
+  "devDependencies": {},
+  "keywords": ["cms", "static", "jamstack", "github-pages"],
+  "author": "Your Name",
+  "license": "MIT"
+}
